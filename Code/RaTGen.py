@@ -10,12 +10,12 @@ class RaTGen:
 
     def generate_custom(self, fun, t0, tmax, dt):
 
-    def generate_punch(self, ):
+    def generate_punch(self, ):     #Whats required?
 
-    def generate_movement(self):
+    def generate_movement(self, ):    #Hard coded movement as list of Transforms
 
-    def add_traj(self, traj1, traj2):
+    def add_traj(self, traj1, traj2):   #Add two trajectories
 
-    def write_traj(self, outfile):
+    def write_csv(self, outfile):      #Writes to file-> q as csv
 
-    def read_traj(self, infile):
+    def read_csv(self, infile):        #Reads from file
