@@ -16,6 +16,8 @@ class RaTGen:
 
     def add_traj(self, traj1, traj2):   #Add two trajectories
 
+    def add_random_noise(self, noise):  #Adds random noise to trajectory    maybe custom Noise function?
+
     def write_csv(self, outfile):      #Writes to file-> q as csv
 
     def read_csv(self, infile):        #Reads from file
