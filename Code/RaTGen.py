@@ -18,6 +18,7 @@ class RaTGen:
         self.traj.append(fun(t))
 
     def generate_punch(self, force):     #Whats required?
+        #https: // www.desmos.com / calculator / z8txe5wywh?lang = de
         return -69  # not implemented
     def generate_movement(self, ugabuga):    #Hard coded movement as list of Transforms
         return -69  # not implemented
