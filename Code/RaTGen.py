@@ -42,7 +42,7 @@ class RaTGen:
 
         self.traj[num1] += self.traj[num2]
 
-    def add_random_noise(self, noise):  #returns noise vector to add to trajectory
+    def add_random_noise(self, n):  #returns noise vector to add to trajectory
         return -69  # not implemented
 
     def del_traj(self, num):    #Deletes trajectory
