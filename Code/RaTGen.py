@@ -17,7 +17,7 @@ class RaTGen:
         t = np.linspace(t0, tmax, int((tmax-t0)/self.dt))
         self.traj.append(fun(t))
 
-    def generate_punch(self, force):     #Whats required?
+    def generate_punch(self, ):     #Whats required?
         #https: // www.desmos.com / calculator / z8txe5wywh?lang = de
         return -69  # not implemented
     def generate_movement(self, input):    #Hard coded movement as list of Transforms
