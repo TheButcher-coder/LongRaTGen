@@ -3,7 +3,7 @@ import pandas as pd
 
 class RaTGen:
     def __init__(self):
-        self.traj = pd.DataFrame()        #maybe Pandas?
+        self.traj = []       #maybe Pandas?
         self.max_q = None       #Contains every joint's max angle
         self.max_accel = None   #Contains max acceleration
         self.max_vel = None     #Contains max velocity
@@ -11,22 +11,41 @@ class RaTGen:
 
 
     def generate_sin(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a sin trajectory
-        self.traj['sin_1'] = amp * np.sin(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase)
+        self.traj.append(amp * np.sin(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase))
 
     def generate_custom(self, fun, t0, tmax):
         t = np.linspace(t0, tmax, int((tmax-t0)/self.dt))
-        self.traj['custom'] = fun(t)
-
+        self.traj.append(fun(t))
 
     def generate_punch(self, force):     #Whats required?
         return -69  # not implemented
-    def generate_movement(self, ):    #Hard coded movement as list of Transforms
+    def generate_movement(self, ugabuga):    #Hard coded movement as list of Transforms
         return -69  # not implemented
     def add_traj(self, traj1, traj2, t_diff=0):   #Add two trajectories
-        return -69  # not implemented
-    def add_random_noise(self, noise):  #Adds random noise to trajectory    maybe custom Noise function?
+        len1 = len(traj1)
+        len2 = len(traj2)
+        if len1 > len2:
+            traj2 = np.append(traj2, np.zeros(len1-len2))
+        else:
+            traj1 = np.append(traj1, np.zeros(len2-len1))
+
+        self.traj.append(traj1 + traj2)
+
+    def add_traj(self, num1, num2):
+        len1 = len(self.traj[num1])
+        len2 = len(self.traj[num2])
+        if len1 > len2:
+            self.traj[num2] = np.append(self.traj[num2], np.zeros(len1-len2))
+        else:
+            self.traj[num1] = np.append(self.traj[num1], np.zeros(len2-len1))
+
+        self.traj[num1] += self.traj[num2]
+
+    def add_random_noise(self, noise):  #returns noise vector to add to trajectory
         return -69  # not implemented
 
+    def del_traj(self, num):    #Deletes trajectory
+        del self.traj[num]
 
     def set_max_q(self, max_q):     #Sets max_q
         self.max_q = max_q
