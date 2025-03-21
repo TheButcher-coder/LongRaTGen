@@ -20,8 +20,8 @@ class RaTGen:
     def generate_punch(self, force):     #Whats required?
         #https: // www.desmos.com / calculator / z8txe5wywh?lang = de
         return -69  # not implemented
-    def generate_movement(self, ugabuga):    #Hard coded movement as list of Transforms
-        return -69  # not implemented
+    def generate_movement(self, input):    #Hard coded movement as list of Transforms
+        self.traj.append(input)
     def add_traj(self, traj1, traj2, t_diff=0):   #Add two trajectories
         len1 = len(traj1)
         len2 = len(traj2)
