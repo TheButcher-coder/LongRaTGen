@@ -26,12 +26,14 @@ class RaTGen:
                 temp[i, :3, :3] = rot[i] if i < len(rot) else np.eye(3)
                 temp[i, :3, 3] = p
                 temp[i, 3, 3] = 1
+            elif len(p) == len(rot):
+                temp[i, :3, :3] = rot[i]
+                temp[i, :3, 3] = p[i]
+                temp[i, 3, 3] = 1
             else:
                 temp[i, :3, :3] = rot
                 temp[i, :3, 3] = p[i] if i < len(p) else np.zeros(3)
                 temp[i, 3, 3] = 1
-
-
 
         self.traj.append(temp)
 
