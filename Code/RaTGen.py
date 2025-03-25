@@ -9,14 +9,40 @@ class RaTGen:
         self.max_vel = None     #Contains max velocity
         self.dt = .1          #Contains time diff
 
+    def make_traj(self, p, rot):
+        # Ensure p and rot are numpy arrays
+        p = np.array(p)
+        rot = np.array(rot)
 
-    def make_traj(self, x, y, z, alpha, beta, gamma):
-        #construct 3d Trajectory with 6DOF and append to traj
-        if len(x) == len(y) == len(z) == len(alpha) == len(beta) == len(gamma):
-            temp = np.zeros(4)
-            temp[3, :3] = np.array([x, y, z])
+        # Determine the length of the trajectory
+        length = max(len(p), len(rot))
 
-            self.traj.append(np.array([x, y, z, alpha, beta, gamma]))
+        # Initialize the transformation matrix
+        temp = np.zeros([length, 4, 4])
+
+        # Assign the position and rotation to the transformation matrix
+        for i in range(length):
+            if len(rot) > len(p):
+                temp[i, :3, :3] = rot[i] if i < len(rot) else np.eye(3)
+                temp[i, :3, 3] = p
+                temp[i, 3, 3] = 1
+            else:
+                temp[i, :3, :3] = rot
+                temp[i, :3, 3] = p[i] if i < len(p) else np.zeros(3)
+                temp[i, 3, 3] = 1
+
+
+
+        self.traj.append(temp)
+
+    def generate_rot_X(self, t):
+        return np.array([[[1, 0, 0], [0, np.cos(ti), -np.sin(ti)], [0, np.sin(ti), np.cos(ti)]] for ti in t])
+
+    def generate_rot_Y(self, t):
+        return np.array([[[np.cos(ti), 0, np.sin(ti)], [0, 1, 0], [-np.sin(ti), 0, np.cos(ti)]] for ti in t])
+
+    def generate_rot_Z(self, t):
+        return np.array([[[np.cos(ti), -np.sin(ti), 0], [np.sin(ti), np.cos(ti), 0], [0, 0, 1]] for ti in t])
 
     def generate_sin(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a sin trajectory
         return amp * np.sin(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase)
