@@ -85,7 +85,7 @@ class RaTGen:
 
         self.traj[num1] += self.traj[num2]
 
-    def add_random_noise(self, amp, t0, tmax):
+    def generate_noise(self, amp, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
         noise = amp * np.random.randn(len(t))
         return noise

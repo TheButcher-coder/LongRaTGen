@@ -9,21 +9,13 @@ fig = plt.figure()
 ax = plt.axes(projection='3d')
 
 rt = RaTGen()
-rt.set_dt(.1)
+rt.set_dt(.01)
 
-fun = lambda x: x**(2)/4
+fun = lambda x: 0.1*x
 
 x = rt.generate_sin(1, 1)
-y = rt.generate_sin(1,  1)
-z = rt.generate_custom(fun, 0, 2*np.pi)
-
+y = rt.generate_cos(1,  1)
+z = rt.generate_custom(fun, 0, 2*np.pi) + rt.generate_noise(.01, 0, 2*np.pi)
 ax.plot3D(x, y, z)
 
-#plt.show()
-
-R = rt.generate_rot_X(rt.generate_sin(180, 1))
-print(R)
-p = np.array([1, 2, 3])
-
-rt.make_traj(p, R)
-print(rt.get_traj())
+plt.show()
