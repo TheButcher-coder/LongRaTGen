@@ -30,7 +30,7 @@ z = rt.generate_custom(fun, 0, 2*np.pi) + rt.generate_noise(.01, 0, 2*np.pi)
 
 ax.plot3D(x, y, z)
 
-plt.show()
+plt.show()```
 
 ![image](https://github.com/user-attachments/assets/0a7dab7f-a626-43a5-bec9-c97150f0ebd6)
 
