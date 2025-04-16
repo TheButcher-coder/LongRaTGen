@@ -18,4 +18,14 @@ y = rt.generate_cos(1,  1)
 z = rt.generate_custom(fun, 0, 2*np.pi) + rt.generate_noise(.01, 0, 2*np.pi)
 ax.plot3D(x, y, z)
 
-plt.show()
+#plt.show()
+
+
+## Robot test
+import roboticstoolbox as rtb
+
+
+bot = rtb.ERobot.URDF('/Users/jakubadmin/Documents/Uni/Bach/python/LongRatGen/Code/data/tx2-90L/urdf/tx2_90l.urdf') #Change to relative path
+
+bot.q = [0, 0, 0, 0, 0, 0]
+bot.plot(bot.q)
