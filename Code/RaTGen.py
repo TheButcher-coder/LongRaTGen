@@ -8,6 +8,7 @@ class RaTGen:
         self.max_accel = None   #Contains max acceleration
         self.max_vel = None     #Contains max velocity
         self.dt = .1          #Contains time diff
+        self.bot = None    #Contains robot object for inverse Kinematics
 
     def make_traj(self, p, rot):
         # Ensure p and rot are numpy arrays
@@ -107,6 +108,10 @@ class RaTGen:
         self.max_vel = max_vel
     def get_max_vel(self):        #Returns max_vel
         return self.max_vel
+
+    def get_traj_q(self, traj:kart):
+        return -69  # not implemented
+
 
     def set_dt(self, dt):     #Sets dt
         self.dt = dt

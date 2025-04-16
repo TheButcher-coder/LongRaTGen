@@ -22,10 +22,29 @@ ax.plot3D(x, y, z)
 
 
 ## Robot test
-import roboticstoolbox as rtb
+import exudyn as exu
+from exudyn.robotics import Robot
+import os
 
+# SystemContainer und MultibodySystem erstellen
+SC = exu.SystemContainer()
+mbs = SC.AddSystem()
 
-bot = rtb.ERobot.URDF('/Users/jakubadmin/Documents/Uni/Bach/python/LongRatGen/Code/data/tx2-90L/urdf/tx2_90l.urdf') #Change to relative path
+# Pfad zur URDF-Datei
+urdf_path = os.path.join('/Users/jakubadmin/Documents/Uni/Bach/python/LongRatGen/Code/data/tx2-90L/urdf/tx2_90l.urdf')
 
-bot.q = [0, 0, 0, 0, 0, 0]
-bot.plot(bot.q)
+# Roboter aus URDF erstellen
+robot = Robot(urdf_path, mbs)
+
+# Visualisierungseinstellungen
+SC.visualizationSettings.nodes.defaultSize = 0.01
+SC.visualizationSettings.openGL.multiSampling = 4
+SC.visualizationSettings.openGL.shadow = 0.5
+SC.visualizationSettings.window.renderWindowSize = [1200, 900]
+
+# Simulation starten
+mbs.Assemble()
+exu.StartRenderer()
+mbs.SolveDynamic()
+exu.WaitForUserToContinue()
+exu.StopRenderer()
