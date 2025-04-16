@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
 
+
 class RaTGen:
     def __init__(self):
-        self.traj = []       #maybe Pandas?
+        self.traj = []
         self.max_q = None       #Contains every joint's max angle
         self.max_accel = None   #Contains max acceleration
         self.max_vel = None     #Contains max velocity
@@ -109,8 +110,8 @@ class RaTGen:
     def get_max_vel(self):        #Returns max_vel
         return self.max_vel
 
-    def get_traj_q(self, traj:kart):
-        return -69  # not implemented
+    def get_traj_q(self, kart):
+        return self.bot.ik_LM(kart)  # not implemented
 
 
     def set_dt(self, dt):     #Sets dt
