@@ -1,15 +1,19 @@
 import numpy as np
 import pandas as pd
-
+from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 
 class RaTGen:
     def __init__(self):
         self.traj = []
         self.max_q = None       #Contains every joint's max angle
-        self.max_accel = None   #Contains max acceleration
-        self.max_vel = None     #Contains max velocity
+        self.max_accel = []   #Contains max acceleration
+        self.max_vel = []     #Contains max velocity
         self.dt = .1          #Contains time diff
         self.bot = None    #Contains robot object for inverse Kinematics
+        self.nullpos = [[],[],[],[]]   #nullposition-kartesian
+        self.mean = np.array([0])
+        self.std_dev = np.array([1])
+        self.rng = OrnsteinUhlenbeckActionNoise(self.mean, self.std_dev)  #Noise generator
 
     def make_traj(self, p, rot):
         # Ensure p and rot are numpy arrays
@@ -75,10 +79,14 @@ class RaTGen:
 
         self.traj[num1] += self.traj[num2]
 
-    def generate_noise(self, amp, t0, tmax):
+    def generate_noise(self, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
-        noise = amp * np.random.randn(len(t))
-        return noise
+
+        values = []
+        for _ in t:
+            value = self.rng()
+            values.append(value[0])
+        return values
 
     def del_traj(self, num):    #Deletes trajectory
         del self.traj[num]
@@ -107,6 +115,9 @@ class RaTGen:
     def get_dt(self):        #Returns dt
         return self.dt
 
+    def trans_kart_to_angles(self, kart):
+        return -69  # not implemented
+
     #IO Functions
     def get_traj(self):     #Returns trajectory
         return self.traj
@@ -114,3 +125,20 @@ class RaTGen:
         return -69  # not implemented
     def read_csv(self, infile):        #Reads from file
         return -69  # not implemented
+
+
+    # Setter & Getter für mean
+    def set_mean(self, mean):
+        self.mean = np.array(mean)
+        self.rng = OrnsteinUhlenbeckActionNoise(self.mean, self.std_dev)
+
+    def get_mean(self):
+        return self.mean
+
+    # Setter & Getter für std_dev
+    def set_std_dev(self, std_dev):
+        self.std_dev = np.array(std_dev)
+        self.rng = OrnsteinUhlenbeckActionNoise(self.mean, self.std_dev)
+
+    def get_std_dev(self):
+        return self.std_dev
