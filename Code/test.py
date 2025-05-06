@@ -10,7 +10,7 @@ ax = plt.axes(projection='3d')
 rt = RaTGen()
 rt.set_dt(.01)
 rt.set_mean(0)
-rt.set_std_dev(1)
+rt.set_std_dev(.5)
 rt.set_max_vel(5)  # m/s
 rt.set_max_accel(160)  # m/s^2
 
