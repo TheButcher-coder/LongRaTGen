@@ -1,18 +1,20 @@
 import numpy as np
 import pandas as pd
 from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
+import scipy as sc
+
 
 class RaTGen:
     def __init__(self):
         self.traj = []
-        self.max_q = None       #Contains every joint's max angle
-        self.max_accel = []   #Contains max acceleration
-        self.max_vel = []     #Contains max velocity
+        self.max_q = None       #Contains every joint's max angle(s)
+        self.max_accel = 1   #Contains max acceleration
+        self.max_vel = 10    #Contains max velocity
         self.dt = .1          #Contains time diff
         self.bot = None    #Contains robot object for inverse Kinematics
         self.nullpos = [[],[],[],[]]   #nullposition-kartesian
-        self.mean = np.array([0])
-        self.std_dev = np.array([1])
+        self.mean = np.array(0)
+        self.std_dev = np.array(.1)
         self.rng = OrnsteinUhlenbeckActionNoise(self.mean, self.std_dev)  #Noise generator
 
     def make_traj(self, p, rot):
@@ -53,10 +55,10 @@ class RaTGen:
         return np.array([[[np.cos(ti), -np.sin(ti), 0], [np.sin(ti), np.cos(ti), 0], [0, 0, 1]] for ti in t])
 
     def generate_sin(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a sin trajectory
-        return amp * np.sin(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase)
+        return amp * np.sin(freq * np.arange(t0, tmax, self.dt) + phase)
 
     def generate_cos(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a cos trajectory
-        return amp * np.cos(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase)
+        return amp * np.cos(freq * np.arange(t0, tmax, self.dt) + phase)
 
     def generate_custom(self, fun, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
@@ -85,7 +87,7 @@ class RaTGen:
         values = []
         for _ in t:
             value = self.rng()
-            values.append(value[0])
+            values.append(value)
         return values
 
     def del_traj(self, num):    #Deletes trajectory
@@ -97,12 +99,12 @@ class RaTGen:
         return self.max_q
 
     def set_max_accel(self, max_accel):     #Sets max_accel
-        self.max_accel = max_accel
+        self.max_accel = max_accel*self.dt
     def get_max_accel(self):        #Returns max_accel
         return self.max_accel
 
     def set_max_vel(self, max_vel):     #Sets max_vel
-        self.max_vel = max_vel
+        self.max_vel = max_vel*self.dt
     def get_max_vel(self):        #Returns max_vel
         return self.max_vel
 
@@ -142,3 +144,65 @@ class RaTGen:
 
     def get_std_dev(self):
         return self.std_dev
+
+    def smooth(self, traj):   #Smooth trajectory with specified acceleration
+        t0 = traj[0]
+        dt = np.diff(traj)
+        v0 = dt[0]
+
+        dt[dt > self.max_vel] = self.max_vel
+        dt[dt < -self.max_vel] = -self.max_vel
+
+        ddt = np.diff(dt)
+
+        ddt[ddt > self.max_accel] = self.max_accel
+        ddt[ddt < -self.max_accel] = -self.max_accel
+
+        dt_new = np.cumsum(ddt)
+        dt_new += v0
+
+        traj_new = np.cumsum(dt_new) + t0
+        return traj_new
+
+
+    def smooth_add_noise(self, traj):
+        t0 = traj[0]
+
+        dt = np.diff(traj)/self.dt
+
+        ddt = np.diff(dt)/self.dt
+
+        ddt[ddt > self.max_accel] = self.max_accel
+        ddt[ddt < -self.max_accel] = -self.max_accel
+
+        dt_new = np.cumsum(ddt)*self.dt
+
+        for i in range(len(dt_new)):
+            dt_new[i] += self.rng()
+
+        dt_new[dt_new > self.max_vel] = self.max_vel
+        dt_new[dt_new < -self.max_vel] = -self.max_vel
+
+        traj_new = np.cumsum(dt_new)*self.dt + t0
+        return traj_new
+
+    def smooth_add_noise2(self, traj):
+        t0 = traj[0]
+
+        dt = np.diff(traj)/self.dt
+
+        ddt = np.diff(dt)/self.dt
+
+        ddt[ddt > self.max_accel] = self.max_accel
+        ddt[ddt < -self.max_accel] = -self.max_accel
+
+        dt_new = np.cumsum(ddt)*self.dt
+
+        for i in range(len(dt_new)):
+            dt_new[i] += self.rng()
+
+        dt_new[dt_new > self.max_vel] = self.max_vel
+        dt_new[dt_new < -self.max_vel] = -self.max_vel
+
+        traj_new = np.cumsum(dt_new)*self.dt + t0
+        return traj_new

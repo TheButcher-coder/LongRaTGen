@@ -1,34 +1,31 @@
 from RaTGen import *
 from mpl_toolkits import mplot3d
-
 import numpy as np
 import matplotlib.pyplot as plt
-
-from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise    #Noise gen
-
+from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise  # Noise gen
 
 fig = plt.figure()
 ax = plt.axes(projection='3d')
 
 rt = RaTGen()
 rt.set_dt(.01)
+rt.set_mean(10)
+rt.set_std_dev(1)
+rt.set_max_vel(100)  # m/s
+rt.set_max_accel(10000)  # m/s^2
 
-fun = lambda x: 0.1*x
+fun = lambda x: 0.5 * x
 
 x = rt.generate_sin(1, 1)
-y = rt.generate_cos(1,  1)
-z = rt.generate_custom(fun, 0, 2*np.pi) + rt.generate_noise( 0, 2*np.pi)
-ax.plot3D(x, y, z)
+y = rt.generate_cos(1, 1)
+z = rt.generate_sin(.5, 10)
 
+# Plot original trajectory
+ax.plot3D(x, y, z, label='Original')
+
+z = rt.smooth_add_noise2(z)
+z.resize(len(x))
+ax.plot3D(x, y, z, label='Smoothed')
+
+ax.legend()
 plt.show()
-
-
-## Robot test
-import roboticstoolbox as rtb
-
-#bot = rtb.ERobot.URDF(
-#    '/Users/jakubadmin/Documents/Uni/Bach/python/LongRatGen/urdf_files_dataset/urdf_files_dataset/urdf_files/ros-industrial/xacro_generated/staubli/staubli_tx2_90_support/urdf/tx2_90l.urdf')  # Change to relative path
-
-#bot.plot([0, 0, 0, 0, 0, 0])
-
-
