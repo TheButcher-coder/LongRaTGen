@@ -5,12 +5,12 @@ from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 class RaTGen:
     def __init__(self):
         self.traj = []
-        self.max_q = None       #Contains every joint's max angle
-        self.max_accel = []   #Contains max acceleration
-        self.max_vel = []     #Contains max velocity
+        self.max_q = np.array([])       #Contains every joint's max angle
+        self.max_accel = np.array([])   #Contains max acceleration
+        self.max_vel = np.array([])     #Contains max velocity
         self.dt = .1          #Contains time diff
         self.bot = None    #Contains robot object for inverse Kinematics
-        self.nullpos = [[],[],[],[]]   #nullposition-kartesian
+        self.nullpos = np.array([[],[],[],[]])   #nullposition-kartesian
         self.mean = np.array([0])
         self.std_dev = np.array([1])
         self.rng = OrnsteinUhlenbeckActionNoise(self.mean, self.std_dev)  #Noise generator
@@ -43,20 +43,23 @@ class RaTGen:
 
         self.traj.append(temp)
 
-    def generate_rot_X(self, t):
+    def generate_rot_X(self, t0, tmax):
+        t = np.arange(t0, tmax, self.dt)
         return np.array([[[1, 0, 0], [0, np.cos(ti), -np.sin(ti)], [0, np.sin(ti), np.cos(ti)]] for ti in t])
 
-    def generate_rot_Y(self, t):
+    def generate_rot_Y(self, t0, tmax):
+        t = np.arange(t0, tmax, self.dt)
         return np.array([[[np.cos(ti), 0, np.sin(ti)], [0, 1, 0], [-np.sin(ti), 0, np.cos(ti)]] for ti in t])
 
-    def generate_rot_Z(self, t):
+    def generate_rot_Z(self, t0, tmax):
+        t = np.arange(t0, tmax, self.dt)
         return np.array([[[np.cos(ti), -np.sin(ti), 0], [np.sin(ti), np.cos(ti), 0], [0, 0, 1]] for ti in t])
 
     def generate_sin(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a sin trajectory
-        return amp * np.sin(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase)
+        return amp * np.sin(freq * np.arange(t0, tmax, self.dt) + phase)
 
     def generate_cos(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a cos trajectory
-        return amp * np.cos(2 * np.pi * freq * np.arange(t0, tmax, self.dt) + phase)
+        return amp * np.cos(freq * np.arange(t0, tmax, self.dt) + phase)
 
     def generate_custom(self, fun, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
@@ -115,8 +118,10 @@ class RaTGen:
     def get_dt(self):        #Returns dt
         return self.dt
 
-    def trans_kart_to_angles(self, kart):
-        return -69  # not implemented
+    def get_nullpos(self):
+        return self.nullpos
+    def set_nullpos(self, nullpos):
+        self.nullpos = nullpos
 
     #IO Functions
     def get_traj(self):     #Returns trajectory
