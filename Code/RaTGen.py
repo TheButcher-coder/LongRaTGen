@@ -147,21 +147,19 @@ class RaTGen:
 
     def smooth(self, traj):   #Smooth trajectory with specified acceleration
         t0 = traj[0]
+
         dt = np.diff(traj)
         v0 = dt[0]
-
         dt[dt > self.max_vel] = self.max_vel
         dt[dt < -self.max_vel] = -self.max_vel
 
         ddt = np.diff(dt)
-
         ddt[ddt > self.max_accel] = self.max_accel
         ddt[ddt < -self.max_accel] = -self.max_accel
 
-        dt_new = np.cumsum(ddt)
-        dt_new += v0
+        dt_new = np.cumsum(ddt) + v0
+        traj_new = np.cumsum(dt_new)
 
-        traj_new = np.cumsum(dt_new) + t0
         return traj_new
 
 
@@ -172,13 +170,13 @@ class RaTGen:
 
         ddt = np.diff(dt)/self.dt
 
+        for i in range(len(ddt)):
+            ddt[i] += self.rng()
         ddt[ddt > self.max_accel] = self.max_accel
         ddt[ddt < -self.max_accel] = -self.max_accel
 
-        dt_new = np.cumsum(ddt)*self.dt
 
-        for i in range(len(dt_new)):
-            dt_new[i] += self.rng()
+        dt_new = np.cumsum(ddt)*self.dt
 
         dt_new[dt_new > self.max_vel] = self.max_vel
         dt_new[dt_new < -self.max_vel] = -self.max_vel

@@ -9,21 +9,24 @@ ax = plt.axes(projection='3d')
 
 rt = RaTGen()
 rt.set_dt(.01)
-rt.set_mean(10)
+rt.set_mean(0)
 rt.set_std_dev(1)
-rt.set_max_vel(100)  # m/s
-rt.set_max_accel(10000)  # m/s^2
+rt.set_max_vel(5)  # m/s
+rt.set_max_accel(160)  # m/s^2
+
+t0 = 0
+tmax = 4*np.pi
 
 fun = lambda x: 0.5 * x
 
-x = rt.generate_sin(1, 1)
-y = rt.generate_cos(1, 1)
-z = rt.generate_sin(.5, 10)
+x = rt.generate_sin(1, .5, 0, t0, tmax)
+y = rt.generate_cos(1, .5, 0, t0, tmax)
+z = rt.generate_sin(.5, 10, 0, t0, tmax) + rt.generate_noise(t0, tmax)
 
 # Plot original trajectory
 ax.plot3D(x, y, z, label='Original')
 
-z = rt.smooth_add_noise2(z)
+z = rt.smooth(z)
 z.resize(len(x))
 ax.plot3D(x, y, z, label='Smoothed')
 
