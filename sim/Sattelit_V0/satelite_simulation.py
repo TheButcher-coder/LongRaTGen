@@ -93,6 +93,8 @@ if flagRobot:
     #    trajectory.Add(ProfileConstantAcceleration(q_2,0.2))
     #    trajectory.Add(ProfileConstantAcceleration(q_1,0.2))
     #Test für noise ring:
+    import sys
+    sys.path.insert(0, '..\\..\\Code')
     import RaTGen as rt
     import numpy as np
     import matplotlib.pyplot as plt
@@ -110,7 +112,7 @@ if flagRobot:
     z = np.ones([len(x)])
 
     # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
-    rot = (rat.generate_rot_X(0, 4*np.pi))
+    rot = rat.generate_rot_X(0, 4*np.pi)
 
     # Punktwolke p
     p = np.array([x, y, z])
