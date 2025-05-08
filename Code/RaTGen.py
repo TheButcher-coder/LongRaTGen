@@ -12,7 +12,7 @@ class RaTGen:
         self.max_vel = 10    #Contains max velocity
         self.dt = .1          #Contains time diff
         self.bot = None    #Contains robot object for inverse Kinematics
-        self.nullpos = [[],[],[],[]]   #nullposition-kartesian
+        self.nullpos = [[],[],[],[]]   #nullposition
         self.mean = np.array(0)
         self.std_dev = np.array(.1)
         self.rng = OrnsteinUhlenbeckActionNoise(self.mean, self.std_dev)  #Noise generator
@@ -45,8 +45,8 @@ class RaTGen:
 
         self.traj.append(temp)
 
-    def generate_rot_X(self, t0, tmax, n=100):
-        t = np.linspace(t0, tmax, n)
+    def generate_rot_X(self, t0, tmax):
+        t = np.arange(t0, tmax, self.dt)
         return np.array([
             [[1, 0, 0],
              [0, np.cos(ti), -np.sin(ti)],
@@ -54,8 +54,8 @@ class RaTGen:
             for ti in t
         ])
 
-    def generate_rot_Y(self, t0, tmax, n=100):
-        t = np.linspace(t0, tmax, n)
+    def generate_rot_Y(self, t0, tmax):
+        t = np.arange(t0, tmax, self.dt)
         return np.array([
             [[np.cos(ti), 0, np.sin(ti)],
              [0, 1, 0],
@@ -63,8 +63,8 @@ class RaTGen:
             for ti in t
         ])
 
-    def generate_rot_Z(self, t0, tmax, n=100):
-        t = np.linspace(t0, tmax, n)
+    def generate_rot_Z(self, t0, tmax):
+        t = np.arange(t0, tmax, self.dt)
         return np.array([
             [[np.cos(ti), -np.sin(ti), 0],
              [np.sin(ti), np.cos(ti), 0],
@@ -222,3 +222,8 @@ class RaTGen:
 
         traj_new = np.cumsum(dt_new)*self.dt + t0
         return traj_new
+
+    def set_nullpos(self, nullpos):
+        self.nullpos = nullpos
+    def get_nullpos(self):
+        return self.nullpos
