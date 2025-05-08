@@ -107,12 +107,11 @@ if flagRobot:
     rat.std = .01
     # Punkte generieren
     x = rat.generate_sin(.5, 1, 0, 0, 4 * np.pi)
-    y = rat.generate_cos(.5, 1, 0, 0, 4 * np.pi)
-    #z = rat.generate_noise(0, 2 * np.pi)
+    y = 1.5*np.ones(len(x))
     z = np.ones([len(x)])
 
     # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
-    rot = rat.generate_rot_X(0, 4*np.pi)
+    rot = rat.generate_rot_Z(np.pi*1/4)
 
     # Punktwolke p
     p = np.array([x, y, z])
@@ -120,7 +119,7 @@ if flagRobot:
     #get homogenous Transform
     T = []
     for i in range(len(rot)):
-        T.append(HT(rot[i], np.array([x[i], y[i], z[i]])))
+        T.append(HT(rot, np.array([x[i], y[i], z[i]])))
     #T = HT(rot, p)
     #calculate inverse kin
     Q = []

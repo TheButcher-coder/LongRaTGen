@@ -72,6 +72,27 @@ class RaTGen:
             for ti in t
         ])
 
+    def generate_rot_X(self, alpha):
+        return np.array([
+            [[1, 0, 0],
+             [0, np.cos(alpha), -np.sin(alpha)],
+             [0, np.sin(alpha), np.cos(alpha)]]
+        ])
+
+    def generate_rot_Y(self, alpha):
+        return np.array([
+            [[np.cos(alpha), 0, np.sin(alpha)],
+             [0, 1, 0],
+             [-np.sin(alpha), 0, np.cos(alpha)]]
+        ])
+
+    def generate_rot_Z(self, alpha):
+        return np.array([
+            [[np.cos(alpha), -np.sin(alpha), 0],
+             [np.sin(alpha), np.cos(alpha), 0],
+             [0, 0, 1]]
+        ])
+
     def generate_sin(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a sin trajectory
         return amp * np.sin(freq * np.arange(t0, tmax, self.dt) + phase)
 
