@@ -102,16 +102,18 @@ if flagRobot:
 
     # Initialisierung
     rat = rt.RaTGen()
-    rat.dt = 1
+    rat.dt = .1
     rat.mean = .1
     rat.std = .01
+    rat.set_nullpos([])
     # Punkte generieren
-    x = rat.generate_sin(.5, 1, 0, 0, 4 * np.pi)
-    y = 1.5*np.ones(len(x))
+    y = rat.generate_sin(.5, 1, 0, 0, 4 * np.pi)
+    x = .5*np.ones(len(y))
+
     z = np.ones([len(x)])
 
     # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
-    rot = rat.generate_rot_Z(np.pi*1/4)
+    rot = np.zeros([3, 3])
 
     # Punktwolke p
     p = np.array([x, y, z])
