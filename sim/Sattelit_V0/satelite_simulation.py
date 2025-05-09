@@ -105,7 +105,7 @@ if flagRobot:
     rat.dt = .1
     rat.mean = .1
     rat.std = .01
-    rat.set_nullpos([])
+    rat.set_nullpos(robot_rtb.ikine_LM(HT(rat.generate_rot_Y(-np.pi/2)@rat.generate_rot_X(np.pi/2)@rat.generate_rot_Z(np.pi/2), [0, -.30, 1]), [0, 0, 0, 0, 0, 0]).q)
     # Punkte generieren
     y = rat.generate_sin(.5, 1, 0, 0, 4 * np.pi)
     x = .5*np.ones(len(y))
@@ -121,7 +121,7 @@ if flagRobot:
     #get homogenous Transform
     T = []
     for i in range(len(rot)):
-        T.append(HT(rot, np.array([x[i], y[i], z[i]])))
+        T.append(HT(rot, (np.array([x[i], y[i], z[i]]))))
     #T = HT(rot, p)
     #calculate inverse kin
     Q = []
@@ -132,8 +132,9 @@ if flagRobot:
         Q.append(ik_solution.q)
         q0 = ik_solution.q  # use previous solution as next initial guess
 
-    for q in Q:
-        trajectory.Add(ProfileConstantAcceleration(q, 1))
+    #for q in Q:
+        #trajectory.Add(ProfileConstantAcceleration(q, 1))
+    trajectory.Add(ProfileConstantAcceleration(rat.get_nullpos(), 1))
 
 #%% 
 
