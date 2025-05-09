@@ -94,7 +94,7 @@ if flagRobot:
     #    trajectory.Add(ProfileConstantAcceleration(q_1,0.2))
     #Test für noise ring:
     import sys
-    sys.path.insert(0, '..\\..\\Code')
+    sys.path.insert(0, '../../Code')
     import RaTGen as rt
     import numpy as np
     import matplotlib.pyplot as plt
