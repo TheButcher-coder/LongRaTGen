@@ -162,10 +162,16 @@ class RaTGen:
     #IO Functions
     def get_traj(self):     #Returns trajectory
         return self.traj
-    def write_csv(self, outfile):      #Writes to file-> q as csv
-        return -69  # not implemented
-    def read_csv(self, infile):        #Reads from file
-        return -69  # not implemented
+
+
+
+    def write_csv(self, outfilename, data):  # Writes to file -> q as csv
+        # Write data to a CSV file
+        pd.DataFrame(data).to_csv(outfilename, index=False, header=False)
+
+    def read_csv(self, infile):  # Reads from file
+        # Read data from a CSV file and return as a numpy array
+        return pd.read_csv(infile, header=None).to_numpy()
 
 
     # Setter & Getter für mean
