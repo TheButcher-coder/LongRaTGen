@@ -45,6 +45,7 @@ class RaTGen:
 
         self.traj.append(temp)
 
+
     def generate_rot_X(self, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
         return np.array([
