@@ -12,7 +12,7 @@ y = rat.generate_cos(1, 1, 0, 0, 2 * np.pi)
 z = rat.generate_noise(0, 2 * np.pi)
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
-rot = rat.generate_rot_Z(0, 2 * np.pi)
+rot = rat.generate_rot_Z_range(0, 2*np.pi)
 
 # Punktwolke p
 p = np.array([x, y, z])

@@ -46,7 +46,7 @@ class RaTGen:
         self.traj.append(temp)
 
 
-    def generate_rot_X(self, t0, tmax):
+    def generate_rot_X_range(self, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
         return np.array([
             [[1, 0, 0],
@@ -55,7 +55,7 @@ class RaTGen:
             for ti in t
         ])
 
-    def generate_rot_Y(self, t0, tmax):
+    def generate_rot_Y_range(self, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
         return np.array([
             [[np.cos(ti), 0, np.sin(ti)],
@@ -64,7 +64,7 @@ class RaTGen:
             for ti in t
         ])
 
-    def generate_rot_Z(self, t0, tmax):
+    def generate_rot_Z_range(self, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
         return np.array([
             [[np.cos(ti), -np.sin(ti), 0],
@@ -99,6 +99,17 @@ class RaTGen:
 
     def generate_cos(self, amp, freq, phase=0, t0=0, tmax=2*np.pi):    #Generates a cos trajectory
         return amp * np.cos(freq * np.arange(t0, tmax, self.dt) + phase)
+
+    def generate_sin_sweep(self, amp, freq0, freqmax, phase=0, t0=0, tmax=2 * np.pi):
+        t = np.arange(t0, tmax, self.dt)
+        freq = np.linspace(freq0, freqmax, len(t))
+        return amp * np.sin(2 * np.pi * freq * t + phase)
+
+    def generate_cos_sweep(self, amp, freq0, freqmax, phase=0, t0=0, tmax=2 * np.pi):
+        t = np.arange(t0, tmax, self.dt)
+        freq = np.linspace(freq0, freqmax, len(t))
+        return amp * np.cos(2 * np.pi * freq * t + phase)
+
 
     def generate_custom(self, fun, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
