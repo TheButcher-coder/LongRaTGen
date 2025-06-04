@@ -19,3 +19,4 @@ z = rt.generate_custom(fun, 0, 2*np.pi) + rt.generate_noise(.01, 0, 2*np.pi)
 ax.plot3D(x, y, z)
 
 plt.show()
+
