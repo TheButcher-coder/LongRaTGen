@@ -14,6 +14,9 @@ z = np.zeros(len(x))
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = rat.generate_rot_Z_range(0, 2*np.pi)
 
+rx = z
+ry = z
+rz =
 # Punktwolke p
 p = np.array([x, y, z])
 
