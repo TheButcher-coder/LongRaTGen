@@ -1,0 +1,4 @@
+These files are part of ARTE, a robotics toolbox for education, distributed under the LGPL licence. 
+
+It is availible on github under: 
+https://github.com/4rtur1t0/ARTE/tree/master?tab=readme-ov-file

@@ -1,0 +1,52 @@
+//open connection
+
+var sio_con:sio
+var ip:string = ""      //IP address of the server
+var port:num = 0     //Port number of the server
+var data:num[6]     //data container for 6 angles
+var is_open, read:bool = false //is the connection open?
+var temp:num = 0 //temporary variable for reading data
+var m_desc:mdesc = mdesc(100, 100, 100, 50, 12.5, "off", 0, 0)        //(maxxel, maxvel, maxdeccel, maxlinvel, maxrotvel, blend, leave, reach)
+
+var joint_temp:point    //temporary variable for joint angles
+
+
+if(sioCTRL(sio_con, "target", ip) == 0)
+    sendMessage("IP-Adress found")
+    is_open = true
+endif
+else        //geht das so überhaupt?
+    sendMessage("IP-Adress not found")
+endif
+
+if(sioCTRL(sio_con, "port", port) == 0)
+    sendMessage("Port found")
+    is_open = true
+endif
+else
+    sendMessage("Port not found")
+endif
+
+
+
+//read connection
+
+while(is_open)
+    sioGet(sio_con, temp)   //check if read is given
+    read = temp==1
+
+    while(read)
+        sioGet(sio_con, data) //read data from the server
+        joint_temp = point(data[0], data[1], data[2], data[3], data[4], data[5]) //convert to point or however this works
+        movej(joint_temp, TOOLVARIABLE, m_desc)
+
+        waitEndMove()
+    endwhile
+endwhile
+//send connection close
+//send data to bot
+//when done send connection open
+//clear buffer
+//repeat until server terminates
+
+//close connection
