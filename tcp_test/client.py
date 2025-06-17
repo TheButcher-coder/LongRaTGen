@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from time import sleep
 
-
+#oajnwdjabndo
 HOST = 'localhost'  # IP-Adresse des Servers
 PORT = 6969        # Port des Servers
 
