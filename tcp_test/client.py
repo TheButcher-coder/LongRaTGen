@@ -21,10 +21,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         for p in data:
             # Warte bis bot ready schickt
             ready = 0
-            while ready == 0:
+            while True:
+                ready = s.recv(1024).decode('utf-8')
+                print(f"Received: {ready}")
+                if ready == "1":
+                    break
                 sleep(0.1)
-                ready = s.recv(1024)
-                print(f"Empfangen: {ready.decode('utf-8')}")
 
             s.sendall(pickle.dumps(p))
             print(f"Gesendet: {p}")

@@ -11,14 +11,15 @@ while True:
     connection, client = tcp_socket.accept()
     print("Connected to client:", client)
     done = 0
+    # Send ready
+    response = "1"
+    connection.sendall(response.encode('utf-8'))
+    print("Sent ready=1")
     while done == 0:
         try:
 
 
-            # Send ready
-            response = "1"
-            connection.sendall(response.encode('utf-8'))
-            print("Sent ready=1")
+
 
             #read all data
             #data = b""
