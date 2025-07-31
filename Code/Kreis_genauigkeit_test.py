@@ -51,3 +51,20 @@ ax.set_zlim(mid_z - max_range, mid_z + max_range)
 
 plt.show()
 
+#safe data to csv
+data = np.zeros([len(p[0]), 16])
+for i in range(len(p)):
+    data[i, 0:3] = rot[i, 0, :]    # First row of rotation
+    data[i, 3] = p[i, 0]           # x position
+    data[i, 4:7] = rot[i, 1, :]    # Second row of rotation
+    data[i, 7] = p[i, 1]           # y position
+    data[i, 8:11] = rot[i, 2, :]   # Third row of rotation
+    data[i, 11] = p[i, 2]          # z position
+    data[i, 12:16] = [0, 0, 0, 0]  # Bottom row, although normally [0,0,0,1]
+
+
+#safer data
+import pandas as pd
+df = pd.DataFrame(data)
+df.to_csv('data.csv', index=False, header=False)
+print(data)
