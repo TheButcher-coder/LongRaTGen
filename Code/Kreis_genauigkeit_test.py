@@ -11,14 +11,19 @@ rat.dt = .01
 rat.set_mean(0)
 rat.set_std_dev(.1)
 # Punkte generieren
-x = rat.generate_sin(1, 1, 0, 0, 2 * np.pi)
-y = rat.generate_cos(1, 1, 0, 0, 2 * np.pi)
-z = rat.generate_noise(0, 2 * np.pi)
+x = rat.generate_sin(.5, 1, 0, 0, 1/2*np.pi)*1000
+y = rat.generate_cos(.5, 1, 0, 0, 1/2*np.pi)*1000
+z = np.ones(len(x))*500
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = rat.generate_rot_Z_range(0, 2*np.pi)
+# da val3 keine transformationsmatrix entgegennimmt, sondern 3 Achswinkel muss nicht transformiert werden
+rx = np.zeros(len(x))
+ry = rx
+rz = np.linspace(0, 1/2*np.pi, len(x))
 
 # Punktwolke p
+#rot = np.array([rx, ry, rz])
 p = np.array([x, y, z])
 
 # Plot
@@ -52,15 +57,14 @@ ax.set_zlim(mid_z - max_range, mid_z + max_range)
 plt.show()
 
 #safe data to csv
-data = np.zeros([len(p[0]), 16])
-for i in range(len(p)):
-    data[i, 0:3] = rot[i, 0, :]    # First row of rotation
-    data[i, 3] = p[i, 0]           # x position
-    data[i, 4:7] = rot[i, 1, :]    # Second row of rotation
-    data[i, 7] = p[i, 1]           # y position
-    data[i, 8:11] = rot[i, 2, :]   # Third row of rotation
-    data[i, 11] = p[i, 2]          # z position
-    data[i, 12:16] = [0, 0, 0, 0]  # Bottom row, although normally [0,0,0,1]
+data = np.zeros([len(x), 6])
+data[:, 0] = x
+data[:, 1] = y
+data[:, 2] = z
+data[:, 3] = rx
+data[:, 4] = ry
+data[:, 5] = rz
+
 
 
 #safer data

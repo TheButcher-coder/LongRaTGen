@@ -9,11 +9,15 @@ rat.dt = .01
 # Punkte generieren
 x = rat.generate_sin(1, 1, 0, 0, 2 * np.pi)
 y = rat.generate_cos(1, 1, 0, 0, 2 * np.pi)
-z = rat.generate_noise(0, 2 * np.pi)
+z = 1.5*np.ones(len(x))
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = rat.generate_rot_Z_range(0, 2*np.pi)
 
+data = np.zeros((16, len(x)))
+
+for i in range(0, len(x)):
+    data[i, :] = [x[i], y[i], z[i], ]
 # Punktwolke p
 p = np.array([x, y, z])
 
