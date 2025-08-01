@@ -7,14 +7,14 @@ import pandas as pd
 from time import sleep
 
 #oajnwdjabndo
-HOST = '192.168.0.254'  # IP-Adresse des Servers
+#HOST = '192.168.0.254'  # IP-Adresse des Servers
+HOST = 'localhost'  # IP-Adresse des Servers
 PORT = 6969        # Port des Servers
 
-data = pd.read_csv('data.csv', delimiter=',')
-#print(data)
-#pi = 3.14
-#data = [[0, 0, 0, 0, 0, 0], [180, 0, 0, 0, 0, 0]]#, [pi/2, 0, 0, 0, 0, 0], [pi, 0, 0, 0, 0, 0]]
-#print(struct.pack([0, 0, 0, 0, 0, 0]))
+data = pd.read_csv('../Code/data.csv', delimiter=',', header=None).to_numpy()
+
+for p in data:
+    print(f"p: {p}")
 
 
 # Socket erstellen
@@ -26,9 +26,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         #begüßen
         print("Greeting with 42")
         s.sendall(struct.pack('f', 42))
-        for i in range(len(data)):
-            p = data.iloc[i]
-            print(p)
+        for p in data:
+            #print(p)
             # Warte bis bot ready schickt
             ready = 0
             while True:

@@ -17,10 +17,6 @@ while True:
     print("Sent ready=1")
     while done == 0:
         try:
-
-
-
-
             #read all data
             #data = b""
             data = connection.recv(8*4096)
