@@ -11,9 +11,9 @@ rat.dt = .01
 rat.set_mean(0)
 rat.set_std_dev(.1)
 # Punkte generieren
-x = rat.generate_sin(1, 1, 0, 0, 2 * np.pi)*500
-y = rat.generate_cos(1, 1, 0, 0, 2 * np.pi)*500
-z = np.ones(0, 2 * np.pi)*500
+#x = rat.generate_sin(1, 1, 0, 0, 2 * np.pi)*500
+#y = rat.generate_cos(1, 1, 0, 0, 2 * np.pi)*500
+#z = np.ones(0, 2 * np.pi)*500
 x = rat.generate_sin(.5, 1, 0, 0, 1/2*np.pi)*1000
 y = rat.generate_cos(.5, 1, 0, 0, 1/2*np.pi)*1000
 z = np.ones(len(x))*500
@@ -21,9 +21,9 @@ z = np.ones(len(x))*500
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = rat.generate_rot_Z_range(0, 2*np.pi)
 # da val3 keine transformationsmatrix entgegennimmt, sondern 3 Achswinkel muss nicht transformiert werden
-rx = np.zeros(len(x))
-ry = rx
-rz = np.linspace(0, 1/2*np.pi, len(x))
+rx = 90*x/500
+ry = 90*y/500
+rz = np.zeros(len(rx))
 
 # Punktwolke p
 #rot = np.array([rx, ry, rz])

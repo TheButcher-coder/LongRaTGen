@@ -13,6 +13,8 @@ PORT = 6969        # Port des Servers
 
 data = pd.read_csv('../Code/data.csv', delimiter=',', header=None).to_numpy()
 
+for p in data:
+    print(struct.pack('ffffff', *p))
 
 
 # Socket erstellen
@@ -40,7 +42,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             sleep(.1)
             #Send data to bot
             #for c in p:
-            print(f"DEBUG: Sending Data: {p} \n as\n {struct.pack('ffffff', p)}")
+            print(f"DEBUG: Sending Data: {p} \n as\n {struct.pack('ffffff', *p)}")
             s.sendall(struct.pack('ffffff', *p))
             #print(f"Gesendet: {p}")
 
