@@ -21,8 +21,8 @@ z = np.ones(len(x))*500
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = rat.generate_rot_Z_range(0, 2*np.pi)
 # da val3 keine transformationsmatrix entgegennimmt, sondern 3 Achswinkel muss nicht transformiert werden
-rx = 90*x/500
-ry = 90*y/500
+rx = 90*y/500
+ry = 90*x/500
 rz = np.zeros(len(rx))
 
 # Punktwolke p
