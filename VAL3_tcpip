@@ -1,52 +1,72 @@
-//open connection
+begin
+  enablePower()
+  //position testing manuell
+  //inp_point = {{0, 0, 1000, 0, 0, 0},{sfree, efree, wfree}}
+  //link(inp_point, frame1)
+  //movel(inp_point, t1, mNomSpeed)
+  //waitEndMove()
+  // Warten auf Begrüßung mit 42
+    inp[0] = -1
+    while(inp[0] != 42)
+      logMsg("DEBUG: Waiting for handshake...")
+      temp = sioGet(io_tcp, inp_bytes)
+      if(temp > 0)
+        fromBinary(inp_bytes, temp/4, "4.0l", inp)
+      endIf
+      delay(0.2)
+    endWhile
+    logMsg("DEBUG: Handshake successful.")
 
-var sio_con:sio
-var ip:string = ""      //IP address of the server
-var port:num = 0     //Port number of the server
-var data:num[6]     //data container for 6 angles
-var is_open, read:bool = false //is the connection open?
-var temp:num = 0 //temporary variable for reading data
-var m_desc:mdesc = mdesc(100, 100, 100, 50, 12.5, "off", 0, 0)        //(maxxel, maxvel, maxdeccel, maxlinvel, maxrotvel, blend, leave, reach)
+    // Server bereit ? sende 1
+    out_bytes[0] = 1
+    sioSet(io_tcp, out_bytes)
 
-var joint_temp:point    //temporary variable for joint angles
+    // Empfangsschleife
+    done = false
+  while(! done)
 
+    // Auf Daten warten
+    do
+      temp = sioGet(io_tcp, inp_bytes)
+      delay(0.1)
+    until(temp > 0)
 
-if(sioCTRL(sio_con, "target", ip) == 0)
-    sendMessage("IP-Adress found")
-    is_open = true
-endif
-else        //geht das so überhaupt?
-    sendMessage("IP-Adress not found")
-endif
+    logMsg("DEBUG: Received " + toString(".4", temp) + " bytes")
+    // Prüfe, ob nur ein einziges num (4 Byte) gesendet wurde
+    fromBinary(inp_bytes, temp, "4.0l", inp)
+    if((temp == 4) and (inp[0] == 0))
+      logMsg("DEBUG: Received termination signal.")
+      done = true
+    elseIf((temp==4) and (inp[0]==123.0))
+      logMsg("DEBUG: Driving to Home and waiting 5s")
+      waitEndMove()
+      delay(2.5)
+      sioSet(io_tcp, 1)
+    else
+      // Bewegung ausführen
+      out_bytes[0] = 0
+      sioSet(io_tcp, out_bytes)
 
-if(sioCTRL(sio_con, "port", port) == 0)
-    sendMessage("Port found")
-    is_open = true
-endif
-else
-    sendMessage("Port not found")
-endif
+        
+      inp_point = {{inp[0], inp[1], inp[2], inp[3], inp[4], inp[5]}, {sfree, efree, wfree}}
+      logMsg("DEBUG: DRIVING TO X: " + toString(".4", inp[0]))
+      logMsg("DEBUG: DRIVING TO Y: " + toString(".4", inp[1]))
+      logMsg("DEBUG: DRIVING TO Z: " + toString(".4", inp[2]))
+      logMsg("DEBUG: DRIVING TO RX: " + toString(".4", inp[3]))
+      logMsg("DEBUG: DRIVING TO RY: " + toString(".4", inp[4]))
+      logMsg("DEBUG: DRIVING TO RZ: " + toString(".4", inp[5]))
+      link(inp_point, frame1)
+      movel(inp_point, t1, mNomSpeed)
+      
+      
 
+      // Bewegung beendet ? sende 1
+      out_bytes[0] = 1
+      sioSet(io_tcp, out_bytes)
+    endIf
 
+  endWhile
 
-//read connection
+    logMsg("DEBUG: Session ended.")
 
-while(is_open)
-    sioGet(sio_con, temp)   //check if read is given
-    read = temp==1
-
-    while(read)
-        sioGet(sio_con, data) //read data from the server
-        joint_temp = point(data[0], data[1], data[2], data[3], data[4], data[5]) //convert to point or however this works
-        movej(joint_temp, TOOLVARIABLE, m_desc)
-
-        waitEndMove()
-    endwhile
-endwhile
-//send connection close
-//send data to bot
-//when done send connection open
-//clear buffer
-//repeat until server terminates
-
-//close connection
+end 
