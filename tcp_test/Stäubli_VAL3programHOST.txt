@@ -1,0 +1,66 @@
+begin
+  enablePower()
+  //position testing manuell
+  //inp_point = {{0, 0, 1000, 0, 0, 0},{sfree, efree, wfree}}
+  //link(inp_point, frame1)
+  //movel(inp_point, t1, mNomSpeed)
+  //waitEndMove()
+  // Warten auf Begrüßung mit 42
+    inp[0] = -1
+    while(inp[0] != 42)
+      logMsg("DEBUG: Waiting for handshake...")
+      temp = sioGet(io_tcp, inp_bytes)
+      if(temp > 0)
+        fromBinary(inp_bytes, temp/4, "4.0l", inp)
+      endIf
+      delay(0.2)
+    endWhile
+    logMsg("DEBUG: Handshake successful.")
+
+    // Server bereit ? sende 1
+    out_bytes[0] = 1
+    sioSet(io_tcp, out_bytes)
+
+    // Empfangsschleife
+    done = false
+  while(! done)
+
+    // Auf Daten warten
+    do
+      temp = sioGet(io_tcp, inp_bytes)
+      delay(0.1)
+    until(temp > 0)
+
+    logMsg("DEBUG: Received " + toString(".4", temp) + " bytes")
+    // Prüfe, ob nur ein einziges num (4 Byte) gesendet wurde
+    fromBinary(inp_bytes, temp, "4.0l", inp)
+    if((temp == 4) and (inp[0] == 0))
+      logMsg("DEBUG: Received termination signal.")
+      done = true
+    else
+      // Bewegung ausführen
+      out_bytes[0] = 0
+      sioSet(io_tcp, out_bytes)
+
+        
+      inp_point = {{inp[0], inp[1], inp[2], inp[3], inp[4], inp[5]}, {sfree, efree, wfree}}
+      logMsg("DEBUG: DRIVING TO X: " + toString(".4", inp[0]))
+      logMsg("DEBUG: DRIVING TO Y: " + toString(".4", inp[1]))
+      logMsg("DEBUG: DRIVING TO Z: " + toString(".4", inp[2]))
+      logMsg("DEBUG: DRIVING TO RX: " + toString(".4", inp[3]))
+      logMsg("DEBUG: DRIVING TO RY: " + toString(".4", inp[4]))
+      logMsg("DEBUG: DRIVING TO RZ: " + toString(".4", inp[5]))
+      link(inp_point, frame1)
+      movel(inp_point, t1, mNomSpeed)
+      //waitEndMove()
+
+      // Bewegung beendet ? sende 1
+      out_bytes[0] = 1
+      sioSet(io_tcp, out_bytes)
+    endIf
+
+  endWhile
+
+    logMsg("DEBUG: Session ended.")
+
+end 
