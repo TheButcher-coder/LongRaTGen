@@ -11,18 +11,19 @@ rat.dt = .01
 rat.set_mean(0)
 rat.set_std_dev(.1)
 # Punkte generieren
-#x = rat.generate_sin(1, 1, 0, 0, 2 * np.pi)*500
-#y = rat.generate_cos(1, 1, 0, 0, 2 * np.pi)*500
-#z = np.ones(0, 2 * np.pi)*500
-x = rat.generate_sin(.5, 1, 0, 0, 1/2*np.pi)*1000
-y = rat.generate_cos(.5, 1, 0, 0, 1/2*np.pi)*1000
-z = np.ones(len(x))*1000
+
+#home position
+rat.set_nullpos(np.array(([250, 250, 500, 0, 0, 0])))
+
+x = rat.generate_sin(.5, 1, 0, 0, 1/2*np.pi)*250
+y = rat.generate_cos(.5, 1, 0, 0, 1/2*np.pi)*250
+z = np.ones(len(x))*1750
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
-rot = rat.generate_rot_Z_range(0, 2*np.pi)
+rot = np.zeros(len(x))
 # da val3 keine transformationsmatrix entgegennimmt, sondern 3 Achswinkel muss nicht transformiert werden
-rx = -90*y/500
-ry = 90*x/500
+rx = np.zeros(len(x))
+ry = np.zeros(len(x))
 rz = np.zeros(len(rx))
 
 # Punktwolke p
@@ -57,7 +58,7 @@ ax.set_ylim(mid_y - max_range, mid_y + max_range)
 ax.set_zlim(mid_z - max_range, mid_z + max_range)
 # ----------------------------------
 
-plt.show()
+#plt.show()
 
 #safe data to csv
 data = np.zeros([len(x), 6])
@@ -72,6 +73,8 @@ data[:, 5] = rz
 
 #safer data
 import pandas as pd
-df = pd.DataFrame(data)
+df = pd.DataFrame(rat.get_nullpos())
+df = pd.concat([df, pd.DataFrame(data)])
+df = pd.concat([df, pd.DataFrame(rat.get_nullpos())])
 df.to_csv('data.csv', index=False, header=False)
 print(data)
