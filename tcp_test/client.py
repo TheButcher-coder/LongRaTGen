@@ -8,15 +8,12 @@ from time import sleep
 
 #oajnwdjabndo
 #HOST = '192.168.0.254'  # IP-Adresse des Servers
-HOST = 'localhost'  # IP-Adresse des Servers
+HOST = '192.168.0.254'  # IP-Adresse des Servers
 PORT = 6969        # Port des Servers
 
-data = pd.read_csv('../Code/data.csv', delimiter=',', header=None).to_numpy()
-
-for p in data:
-    print(struct.pack('ffffff', *p))
-
-
+data = pd.read_csv('data.csv', delimiter=',', header=None).to_numpy()
+homepos = data[0]
+print("DEBUG: HOMEPOS IS:", homepos)
 # Socket erstellen
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     try:
@@ -44,7 +41,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             #for c in p:
             print(f"DEBUG: Sending Data: {p} \n as\n {struct.pack('ffffff', *p)}")
             s.sendall(struct.pack('ffffff', *p))
+            #if is hompos send 123 to bot to signal him to stop
+            if (p == homepos).all():
+                sleep(2.5)
+                print("DEBUG: WAITING AT HOMEPOS")
+                n = 123.0
+                s.sendall(struct.pack('f', n))
             #print(f"Gesendet: {p}")
-
+        s.sendall(struct.pack("f", 0.0))
     except Exception as e:
         print(f"Fehler: {e}")
