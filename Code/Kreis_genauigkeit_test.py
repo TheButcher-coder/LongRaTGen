@@ -17,7 +17,7 @@ rat.set_nullpos(np.array(([250, 250, 500, 0, 0, 0])))
 
 x = rat.generate_sin(.5, 1, 0, 0, 1/2*np.pi)*250
 y = rat.generate_cos(.5, 1, 0, 0, 1/2*np.pi)*250
-z = np.ones(len(x))*750
+z = np.ones(len(x))*600
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = np.zeros(len(x))
