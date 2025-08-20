@@ -13,11 +13,11 @@ rat.set_std_dev(.1)
 # Punkte generieren
 
 #home position
-rat.set_nullpos(np.array(([250, 250, 500, 0, 0, 0])))
+rat.set_nullpos(np.array(([250, 250, 750, 0, 0, 0])))
 
 x = rat.generate_sin(250, 1, 0, 0, np.pi)
 y = rat.generate_cos(250, 1, 0, 0, np.pi)
-z = np.ones(len(x))*600
+z = np.ones(len(x))*750
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
 rot = np.zeros(len(x))
@@ -74,6 +74,8 @@ data[:, 5] = rz
 #safer data
 import pandas as pd
 df = pd.DataFrame(rat.get_nullpos())
+df = pd.concat([df, pd.DataFrame(data)])
+df = pd.concat([df, pd.DataFrame(rat.get_nullpos())])
 df = pd.concat([df, pd.DataFrame(data)])
 df = pd.concat([df, pd.DataFrame(rat.get_nullpos())])
 df.to_csv('data.csv', index=False, header=False)
