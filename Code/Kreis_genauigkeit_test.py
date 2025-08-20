@@ -15,8 +15,8 @@ rat.set_std_dev(.1)
 #home position
 rat.set_nullpos(np.array(([250, 250, 500, 0, 0, 0])))
 
-x = rat.generate_sin(.5, 1, 0, 0, np.pi)*500
-y = rat.generate_cos(.5, 1, 0, 0, np.pi)*500
+x = rat.generate_sin(250, 1, 0, 0, np.pi)
+y = rat.generate_cos(250, 1, 0, 0, np.pi)
 z = np.ones(len(x))*600
 
 # Rotation (angenommen: rot ist eine Liste von 3x3-Rotationsmatrizen)
