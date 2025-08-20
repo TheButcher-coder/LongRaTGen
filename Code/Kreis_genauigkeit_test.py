@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # Initialisierung
 rat = rt.RaTGen()
-rat.dt = .01
+rat.dt = .5
 rat.set_mean(0)
 rat.set_std_dev(.1)
 # Punkte generieren
