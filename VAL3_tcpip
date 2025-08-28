@@ -47,8 +47,17 @@ begin
       out_bytes[0] = 0
       sioSet(io_tcp, out_bytes)
 
-        
+      //Check mit bool pointtojoint ob ein move möglich ist(fängt es kollisionen ab?)
+      
       inp_point = {{inp[0], inp[1], inp[2], inp[3], inp[4], inp[5]}, {sfree, efree, wfree}}
+
+      bool b = pointtojoint(t1, herej(), inp_point(), j_temp)
+      if(b)
+        logMsg("DEBUG: Move inpossible. Resume next Trajectory!")
+        out_bytes[0] = 123
+        sioSet(io_tcp, out_bytes)
+      endIf
+
       logMsg("DEBUG: DRIVING TO X: " + toString(".4", inp[0]))
       logMsg("DEBUG: DRIVING TO Y: " + toString(".4", inp[1]))
       logMsg("DEBUG: DRIVING TO Z: " + toString(".4", inp[2]))
