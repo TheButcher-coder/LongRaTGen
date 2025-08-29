@@ -30,7 +30,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 flag_skip = False
             if flag_skip:
                 #TODO
-                data[i-1] = homepos
+                data[i-2] = homepos
                 continue
             
             #print(p)
@@ -45,6 +45,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 elif ready == 123:
                     print("DEBUG: IMPOSSIBLE MOVE SKIPPING MOTION AND RESUMING FROM HOME!")
                     flag_skip = True
+                    data[i-1] = homepos
                     s.sendall(struct.pack('ffffff', *homepos))
                 sleep(0.1)
             #wait 5s before sending data for more robustness
