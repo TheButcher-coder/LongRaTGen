@@ -56,17 +56,17 @@ begin
         logMsg("DEBUG: Move inpossible. Resume next Trajectory!")
         out_bytes[0] = 123
         sioSet(io_tcp, out_bytes)
-      endIf
+      else
 
-      logMsg("DEBUG: DRIVING TO X: " + toString(".4", inp[0]))
-      logMsg("DEBUG: DRIVING TO Y: " + toString(".4", inp[1]))
-      logMsg("DEBUG: DRIVING TO Z: " + toString(".4", inp[2]))
-      logMsg("DEBUG: DRIVING TO RX: " + toString(".4", inp[3]))
-      logMsg("DEBUG: DRIVING TO RY: " + toString(".4", inp[4]))
-      logMsg("DEBUG: DRIVING TO RZ: " + toString(".4", inp[5]))
-      link(inp_point, frame1)
-      movel(inp_point, t1, mNomSpeed)
-      
+        logMsg("DEBUG: DRIVING TO X: " + toString(".4", inp[0]))
+        logMsg("DEBUG: DRIVING TO Y: " + toString(".4", inp[1]))
+        logMsg("DEBUG: DRIVING TO Z: " + toString(".4", inp[2]))
+        logMsg("DEBUG: DRIVING TO RX: " + toString(".4", inp[3]))
+        logMsg("DEBUG: DRIVING TO RY: " + toString(".4", inp[4]))
+        logMsg("DEBUG: DRIVING TO RZ: " + toString(".4", inp[5]))
+        link(inp_point, frame1)
+        movel(inp_point, t1, mNomSpeed)
+      endif
       
 
       // Bewegung beendet ? sende 1
