@@ -30,7 +30,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 flag_skip = False
             if flag_skip:
                 #TODO
-                data[i] = homepos
+                data[i-1] = homepos
                 continue
             
             #print(p)
