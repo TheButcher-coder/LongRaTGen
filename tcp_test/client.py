@@ -45,7 +45,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 elif ready == 123:
                     print("DEBUG: IMPOSSIBLE MOVE SKIPPING MOTION AND RESUMING FROM HOME!")
                     flag_skip = True
-                    s.sendall(struct.pack('ffffff', homepos))
+                    s.sendall(struct.pack('ffffff', *homepos))
                 sleep(0.1)
             #wait 5s before sending data for more robustness
             #print("DEBUG: Waiting 5s before starting to send Data")
