@@ -51,8 +51,8 @@ begin
       
       inp_point = {{inp[0], inp[1], inp[2], inp[3], inp[4], inp[5]}, {sfree, efree, wfree}}
 
-      bool b = pointtojoint(t1, herej(), inp_point(), j_temp)
-      if(b)
+      b = pointToJoint(t1, herej(), inp_point, j_temp)
+      if(!b)
         logMsg("DEBUG: Move inpossible. Resume next Trajectory!")
         out_bytes[0] = 123
         sioSet(io_tcp, out_bytes)
