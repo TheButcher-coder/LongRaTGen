@@ -15,6 +15,8 @@ data = pd.read_csv('data.csv', delimiter=',', header=None).to_numpy()
 homepos = data[0]
 print("DEBUG: HOMEPOS IS:", homepos)
 # Socket erstellen
+flag_skip = False
+i = 0
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     try:
         # Verbindung zum Server aufbauen
@@ -24,6 +26,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         print("Greeting with 42")
         s.sendall(struct.pack('f', 42))
         for p in data:
+            if (p == homepos).all():
+                flag_skip = False
+            if flag_skip:
+                #TODO
+                data[i] = homepos
+                continue
+            
             #print(p)
             # Warte bis bot ready schickt
             ready = 0
@@ -33,6 +42,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 print(f"Received: {ready}")
                 if ready == 1:
                     break
+                elif ready == 123:
+                    print("DEBUG: IMPOSSIBLE MOVE SKIPPING MOTION AND RESUMING FROM HOME!")
+                    flag_skip = True
+                    s.sendall(struct.pack('ffffff', homepos))
                 sleep(0.1)
             #wait 5s before sending data for more robustness
             #print("DEBUG: Waiting 5s before starting to send Data")
@@ -47,7 +60,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 print("DEBUG: WAITING AT HOMEPOS")
                 n = 123.0
                 s.sendall(struct.pack('f', n))
+            i += 1
             #print(f"Gesendet: {p}")
         s.sendall(struct.pack("f", 0.0))
     except Exception as e:
         print(f"Fehler: {e}")
+        
+        
+temp = pd.DataFrame(data)
+temp.to_csv("data_executed.csv", header=None)
