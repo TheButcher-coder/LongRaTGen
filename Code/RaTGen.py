@@ -134,7 +134,6 @@ class RaTGen:
 
     def generate_noise(self, t0, tmax):
         t = np.arange(t0, tmax, self.dt)
-
         values = []
         for _ in t:
             value = self.rng()
