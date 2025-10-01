@@ -20,6 +20,7 @@ def half_circ():
     y = rat.generate_cos(250, 1, 0, 0, np.pi)
     z = np.ones(len(x))*750
 
+
     rx = np.zeros(len(x))
     ry = np.zeros(len(x))
     rz = np.zeros(len(rx))
