@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # Initialisierung
 rat = rt.RaTGen()
-rat.dt = .01
+rat.dt = .5
 rat.set_mean(0)
 rat.set_std_dev(.1)
 # Punkte generieren
@@ -73,10 +73,10 @@ data[:, 5] = rz
 
 #safer data
 import pandas as pd
-df = pd.DataFrame(rat.get_nullpos())
+df = pd.DataFrame(rat.get_nullpos().T)
 df = pd.concat([df, pd.DataFrame(data)])
-df = pd.concat([df, pd.DataFrame(rat.get_nullpos())])
+df = pd.concat([df, pd.DataFrame(rat.get_nullpos().T)])
 df = pd.concat([df, pd.DataFrame(data)])
-df = pd.concat([df, pd.DataFrame(rat.get_nullpos())])
+df = pd.concat([df, pd.DataFrame(rat.get_nullpos().T)])
 df.to_csv('data.csv', index=False, header=False)
 print(data)

@@ -16,7 +16,7 @@ rot = rat.generate_rot_Z_range(0, 2*np.pi)
 
 rx = z
 ry = z
-rz =
+rz = z
 # Punktwolke p
 p = np.array([x, y, z])
 
